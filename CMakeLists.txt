@@ -5,9 +5,10 @@ set(CMAKE_CXX_STANDARD 17)
 find_package(CUDAToolkit REQUIRED)
 
 # turing arch, tesla t4
-if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
-  set(CMAKE_CUDA_ARCHITECTURES 75)
-endif()
+# if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+set(CMAKE_CUDA_ARCHITECTURES 75)
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -arch=sm_75 --std=c++17")
+#endif()
 
 file(GLOB SOURCES "src/kernel*.cu")
 add_library(kernels ${SOURCES})
@@ -18,8 +19,8 @@ target_compile_options(kernels PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:--generate-lin
 target_compile_options(kernels PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:--expt-relaxed-constexpr>)
 target_compile_options(kernels PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:--keep>)
 
-add_library(cublas_launch src/cublas_benchmark.cu)
-target_link_libraries(cublas_launch CUDA::cublas)
+#add_library(cublas_launch src/cublas_benchmark.cu)
+#target_link_libraries(cublas_launch CUDA::cublas)
 
 add_executable(runner src/main.cu)
-target_link_libraries(runner PUBLIC kernels cublas_launch)
+target_link_libraries(runner PUBLIC kernels) # cublas_launch)

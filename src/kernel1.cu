@@ -1,5 +1,6 @@
 #include <cuda.h>
 #include <mma.h>
+#include <cuda_fp16.h>
 
 #include "device_utils.cuh"
 #include "structs_n_stuff.cuh"
@@ -178,7 +179,7 @@ kernel_1(half* A,
         acc_register_[mma_m][mma_n][0] = acc_register_[mma_m][mma_n][0] * alpha_ + C_register[mma_m][mma_n][0] * beta_;
         acc_register_[mma_m][mma_n][1] = acc_register_[mma_m][mma_n][1] * alpha_ + C_register[mma_m][mma_n][1] * beta_;
         acc_register_[mma_m][mma_n][2] = acc_register_[mma_m][mma_n][2] * alpha_ + C_register[mma_m][mma_n][2] * beta_;
-        acc_register_[mma_m][mma_n][3] = acc_register_[mma_m][mma_n][3] * alpha_ + C_register[mma_m][mma_n][3] * beta_;
+        acc_register_[mma_m][mma_n][3] = __hmul(acc_register_[mma_m][mma_n][3], alpha_) + __hmul(C_register[mma_m][mma_n][3], beta_);
       }
   }
 

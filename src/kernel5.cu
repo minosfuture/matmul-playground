@@ -1,5 +1,6 @@
 #include <cuda.h>
 #include <mma.h>
+#include <cuda_fp16.h>
 
 #include "device_utils.cuh"
 #include "structs_n_stuff.cuh"
